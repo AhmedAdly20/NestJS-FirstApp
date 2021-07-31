@@ -1,11 +1,15 @@
 import { FindStudentsResponseDto, StudentResponseDto } from './../students/dto/students.dto';
 import { Controller, Get, Param, Put } from "@nestjs/common";
+import { StudentsService } from 'src/students/students.service';
 
 @Controller("teachers/:teacherId/students")
 export class TeacherStudentsController {
+
+  constructor(private _studentService: StudentsService) {}
+
   @Get()
   getStudents(@Param('teacherId') teacherId:string): FindStudentsResponseDto[] {
-    return `Teacher with id ${teacherId}  students`;
+    return this._studentService.getStudentsByTeacherId(teacherId);
   }
 
   @Put("/:studentId")
@@ -14,6 +18,6 @@ export class TeacherStudentsController {
     @Param('studentId') studentId:string
   ) : StudentResponseDto  
   {
-    return `Update Student with id ${studentId} to teacher with id ${teacherId}`;
+    return this._studentService.updateStudentTeacher(teacherId, studentId);
   }
 }

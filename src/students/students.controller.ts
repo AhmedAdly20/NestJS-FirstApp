@@ -1,6 +1,6 @@
 import { StudentsService } from './students.service';
 import { CreateStudentDto, UpdateStudentDto, FindStudentsResponseDto } from './dto/students.dto';
-import { Body, Controller, Get, Param, Post, Put,  } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, Put,  } from '@nestjs/common';
 
 @Controller('students')
 export class StudentsController {
@@ -14,7 +14,7 @@ export class StudentsController {
 
 
     @Get('/:studentId')
-    getStudentById( @Param('studentId') studentId: string ): FindStudentsResponseDto
+    getStudentById( @Param('studentId', new ParseUUIDPipe()) studentId: string ): FindStudentsResponseDto
     {
         return this._studentService.getStudentById(studentId);
     }
@@ -29,7 +29,7 @@ export class StudentsController {
 
     @Put('/:studentId')
     updateStudent(
-        @Param('studentId') studentId: string,
+        @Param('studentId', new ParseUUIDPipe()) studentId: string,
         @Body() body: UpdateStudentDto
     ) : UpdateStudentDto
     {
